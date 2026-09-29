@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+  crypto-service:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NATS_URL=nats://nats:4222
+      - CRYPTO_PASSWORD_LENGTH=32
+      - MESSAGE_MAX_TRIES=3
+      - MESSAGE_EXPIRY_DAYS=2
+    depends_on:
+      - nats
